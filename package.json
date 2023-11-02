@@ -2,15 +2,29 @@
   "name": "store",
   "version": "1.0.0",
   "description": "Test for BRM",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "babel-node": "babel-node --presets='@babel/preset-env'",
+    "dev": "nodemon --exec npm run babel-node -- src/index.js",
+    "build": "babel src -d dist"
   },
   "author": "Diana Cifuentes",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "mariadb": "^3.2.2",
+    "sequelize": "^6.33.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.2",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.2",
+    "nodemon": "^3.0.1"
   }
 }
