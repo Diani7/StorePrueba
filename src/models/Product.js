@@ -1,8 +1,6 @@
 import { DataTypes } from 'sequelize';
-import sequelizeInstance from '../dbConfig';
 
-
-const Product = sequelizeInstance.define('Product', {
+const Product = (sequelizeInstance) => sequelizeInstance.define('Product', {
     lote: {
         type: DataTypes.INTEGER,
         allowNull: false,

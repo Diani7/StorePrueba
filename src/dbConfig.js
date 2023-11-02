@@ -8,9 +8,6 @@ export default new Sequelize({
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   modelPaths: [`${__dirname}/models`],
-  define: {
-    underscored: true,
-    charset: 'utf8',
-    timestamps: true,
-  },
 });
+
+console.log('^******', __dirname)

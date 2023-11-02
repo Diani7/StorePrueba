@@ -1,8 +1,7 @@
 import { DataTypes } from 'sequelize';
-import sequelizeInstance from '../dbConfig';
 
-
-const User = sequelizeInstance.define('User', {
+const User = (sequelizeInstance) => {
+	sequelizeInstance.define('User', {
     username: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -15,6 +14,8 @@ const User = sequelizeInstance.define('User', {
 			type: DataTypes.ENUM(['admin', 'customer']),
 			allowNull: false,
 		}
-});
+  });
+}
+
 
 export default User;

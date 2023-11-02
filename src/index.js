@@ -6,20 +6,41 @@ require("@babel/core").transform("code", {
 });
 // const express = require('express');
 import express from 'express';
-import sequelizeInstance from './dbConfig';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+const { Sequelize } = require('sequelize');
+import User from './models/User';
+import Product from './models/Product';
+
+const sequelizeInstance = new Sequelize({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT || 3306,
+  database: process.env.DB_NAME,
+  dialect: 'mariadb',
+  username: process.env.DB_USER,
+  password: process.env.DB_PASS,
+});
 
 const { APP_PORT } = process.env || 3000;
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
+
 (async () => {
   try {
+    User(sequelizeInstance);
+    Product(sequelizeInstance);
+
+    // await instance.sync({ force: true });
     await sequelizeInstance.authenticate();
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }
-})()
+})();
 
 
 
