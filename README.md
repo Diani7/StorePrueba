@@ -54,3 +54,7 @@ services:
 ## Correr seeds (datos precargados)
 
 `npx sequelize-cli db:seed:all`
+
+## Generar la documentación con JSdoc
+
+`npm run doc`
