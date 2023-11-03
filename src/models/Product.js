@@ -4,7 +4,7 @@ const Product = (sequelizeInstance) => sequelizeInstance.define(
     'Product', 
     {
         lote: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
         },
         name: {
