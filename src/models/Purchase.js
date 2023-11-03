@@ -1,8 +1,7 @@
 import { DataTypes } from 'sequelize';
-import sequelizeInstance from '../dbConfig';
 import Product from './Product';
 
-const Purchase = sequelizeInstance.define('Purchase', {
+export const Purchase = (sequelizeInstance) => sequelizeInstance.define('Purchase', {
     price: {
         type: DataTypes.FLOAT,
         allowNull: false,
@@ -17,7 +16,7 @@ const Purchase = sequelizeInstance.define('Purchase', {
     },
 });
 
-const PurchaseProducts = sequelize.define('PurchaseProducts', {
+export const PurchaseProducts = (sequelizeInstance) => sequelizeInstance.define('PurchaseProducts', {
   PurchaseId: {
     type: DataTypes.INTEGER,
     references: {
@@ -41,4 +40,3 @@ const PurchaseProducts = sequelize.define('PurchaseProducts', {
 Purchase.belongsToMany(Product, { through: PurchaseProducts });
 Product.belongsToMany(Purchase, { through: PurchaseProducts });
 
-export default Purchase;
