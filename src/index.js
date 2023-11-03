@@ -1,3 +1,4 @@
+require("@babel/register");
 import 'dotenv/config';
 require('dotenv').config();
 
@@ -11,7 +12,8 @@ import cors from 'cors';
 const { Sequelize } = require('sequelize');
 import User from './models/User';
 import Product from './models/Product';
-import Purchase, { PurchaseProducts } from './models/Purchase';
+import Purchase from './models/Purchase';
+import PurchaseProducts from './models/PurchaseProducts';
 
 const sequelizeInstance = new Sequelize({
   host: process.env.DB_HOST,
@@ -32,14 +34,21 @@ app.use(cors());
 
 (async () => {
   try {
-    User(sequelizeInstance);
-    Product(sequelizeInstance);
-    Purchase(sequelizeInstance);
-    PurchaseProducts(sequelizeInstance);
+    const UserModel = User(sequelizeInstance);
+    const ProductModel = Product(sequelizeInstance);
+    const PurchaseModel = Purchase(sequelizeInstance, UserModel);
+    
+    const PurchaseProductsModel = PurchaseProducts(
+      sequelizeInstance, 
+      PurchaseModel, 
+      ProductModel
+    );
+    
+    PurchaseModel.belongsToMany(ProductModel, { through: PurchaseProductsModel });
+    ProductModel.belongsToMany(PurchaseModel, { through: PurchaseProductsModel });
 
-
-    await sequelizeInstance.sync({ alter: true });
-    //await sequelizeInstance.authenticate();
+    await sequelizeInstance.sync({ force: true });
+    // await sequelizeInstance.authenticate();
     console.log('Connection has been established successfully.');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
