@@ -28,7 +28,7 @@ export default class AuthenticationController {
 
             const token = jwt.sign(
                 userInfo,
-                SECRET,
+                this.SECRET,
                 { expiresIn: '7d' }
             );
 
@@ -37,5 +37,21 @@ export default class AuthenticationController {
         }
 
         return null;
+    }
+
+    async verifyLogin(bearerToken) {
+        const token = bearerToken.substr(7, bearerToken.length);
+        
+        try {
+            const decoded = jwt.verify(
+                token,
+                this.SECRET,
+            );
+            return { ...decoded }
+            
+        } catch (error) {
+            console.error('fuck this shit', error)
+            return { error };
+        }
     }
 }

@@ -49,4 +49,8 @@ services:
 
 ## Migración ORM sequelize 
 
-``
+`npx sequelize-cli db:migrate`
+
+## Correr seeds (datos precargados)
+
+`npx sequelize-cli db:seed:all`

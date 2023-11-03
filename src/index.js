@@ -5,7 +5,6 @@ require('dotenv').config();
 require("@babel/core").transform("code", {
   presets: ["@babel/preset-env"],
 });
-// const express = require('express');
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -62,6 +61,7 @@ app.use(cors());
 
     const usersControllerInstance = new UsersController(UserModel);
     const productsControllerInstance = new ProductsController(ProductModel);
+    const authenticationControllerInstance = new AuthenticationController(UserModel, SECRET);
     
     const products = await productsControllerInstance.getProducts();    
     
@@ -70,10 +70,21 @@ app.use(cors());
     })
 
     app.post('/api/users', async (req, res) => {
-      const { body } = req;
-      const createdUser = await usersControllerInstance.createUser({ ...body });
+      const { body, headers } = req;
+      const loginResponse = await authenticationControllerInstance.verifyLogin(headers.authorization);
 
-      res.json(createdUser);
+      if (!loginResponse.error && loginResponse.role === 'admin') {
+        try {
+          const createdUser = await usersControllerInstance.createUser({ ...body });
+          res.status(201).json(createdUser);
+        } catch (error) {
+          console.error('***** errooooorrrr ******', error.name);
+          res.status(422).send(error.name)
+        }
+      } else {
+        res.status(403).json(loginResponse.error)
+      }
+      
     })
 
     app.get('/api/products', async (req, res) => {
@@ -113,7 +124,7 @@ app.use(cors());
     })
 
     app.post('/api/login', async (req, res) => {
-      const authenticationControllerInstance = new AuthenticationController(UserModel, SECRET);
+      
       const { body } = req;
       
       const authenticationInfo = await authenticationControllerInstance.authenticate(body);
