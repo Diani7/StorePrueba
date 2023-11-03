@@ -1,6 +1,10 @@
 import { DataTypes } from 'sequelize';
-import User from './User';
-
+/**
+ * Define el modelo de Compra con sus propiedades y la relación con el modelo de Usuario.
+ * @param {Sequelize} sequelizeInstance - Instancia de conexión de Sequelize.
+ * @param {Sequelize.Model} userInstance - Modelo de Usuario para la clave foránea.
+ * @returns {Sequelize.Model} Modelo de Compra.
+ */
 const Purchase = (sequelizeInstance, userInstance) => {
   return sequelizeInstance.define('Purchase', {
       price: {
@@ -21,10 +25,5 @@ const Purchase = (sequelizeInstance, userInstance) => {
       },
   });
 }
-
-
-
-// Purchase.belongsToMany(Product, { through: PurchaseProducts });
-// Product.belongsToMany(Purchase, { through: PurchaseProducts });
 
 export default Purchase;

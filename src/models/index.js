@@ -1,3 +1,5 @@
+// created by Sequelize init
+
 'use strict';
 
 const fs = require('fs');

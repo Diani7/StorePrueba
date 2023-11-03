@@ -1,5 +1,9 @@
 import { DataTypes } from 'sequelize';
-
+/**
+ * Define el modelo de Producto con sus propiedades.
+ * @param {Sequelize} sequelizeInstance - Instancia de conexión de Sequelize.
+ * @returns {Sequelize.Model} Modelo de Producto.
+ */
 const Product = (sequelizeInstance) => sequelizeInstance.define(
     'Product', 
     {

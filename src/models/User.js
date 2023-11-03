@@ -1,9 +1,9 @@
 import { DataTypes } from 'sequelize';
 
 /**
- * 
- * @param {object} sequelizeInstance 
- * @returns {function}
+ * Define el modelo de Usuario con sus propiedades.
+ * @param {Sequelize} sequelizeInstance - Instancia de conexión de Sequelize.
+ * @returns {Sequelize.Model} Modelo de Usuario.
  */
 const User = (sequelizeInstance) => {
     return sequelizeInstance.define(

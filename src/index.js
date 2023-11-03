@@ -1,3 +1,7 @@
+/**
+ * @fileoverview Archivo de inicio para la API de inventario. Configura el servidor Express,
+ * la conexión a la base de datos con Sequelize, y establece las rutas de la API.
+ */
 require("@babel/register");
 import 'dotenv/config';
 require('dotenv').config();
@@ -21,6 +25,7 @@ import { isValidBody } from './utils';
 import { productModelAttributes } from './constants';
 import AuthenticationController from './controllers/authentication';
 
+// Configuración de la instancia de Sequelize para la conexión a la base de datos.
 const sequelizeInstance = new Sequelize({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT || 3306,
@@ -29,16 +34,18 @@ const sequelizeInstance = new Sequelize({
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
 });
-
+// Configuración del puerto de la aplicación y la clave secreta para JWT.
 const { APP_PORT } = process.env || 3000;
 const { SECRET } = process.env
-
+// Inicialización de la aplicación Express y configuración de middleware.
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-
+/**
+ * Función autoinvocada para configurar y sincronizar la base de datos y el servidor.
+ */
 (async () => {
   try {
     const UserModel = User(sequelizeInstance);
@@ -55,15 +62,20 @@ app.use(cors());
     ProductModel.belongsToMany(PurchaseModel, { through: PurchaseProductsModel });
 
     // await sequelizeInstance.sync({ alter: true });
+    // Autenticación con la base de datos.
     await sequelizeInstance.authenticate();
     console.log('Connection has been established successfully.');
 
-
+    // Instancias de los controladores con sus respectivos modelos.
     const usersControllerInstance = new UsersController(UserModel);
     const productsControllerInstance = new ProductsController(ProductModel);
     const authenticationControllerInstance = new AuthenticationController(UserModel, SECRET);
     
     const products = await productsControllerInstance.getProducts();    
+
+    // Definición de rutas de la API y sus controladores.
+    // Aquí se establecen las rutas para la gestión de usuarios, productos y autenticación.
+    // Se utilizan los métodos de los controladores para responder a las solicitudes HTTP.
     
     app.get('/api/users', async (req, res) => {
       res.json(users);
