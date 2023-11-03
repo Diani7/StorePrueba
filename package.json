@@ -8,7 +8,7 @@
     "start": "nodemon index.js",
     "babel-node": "babel-node --presets='@babel/preset-env'",
     "dev": "nodemon --exec npm run babel-node -- src/index.js",
-    "build": "babel src -d dist",
+    "build": "babel src --out-dir dist --extensions \".js,.jsx\" --presets @babel/preset-env",
     "doc": "jsdoc -c jsdoc.json"
   },
   "author": "Diana Cifuentes",
