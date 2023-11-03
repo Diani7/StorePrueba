@@ -78,11 +78,13 @@ app.use(cors());
           const createdUser = await usersControllerInstance.createUser({ ...body });
           res.status(201).json(createdUser);
         } catch (error) {
-          console.error('***** errooooorrrr ******', error.name);
+          console.error('***** errooooorrrr DB******', error.name);
           res.status(422).send(error.name)
         }
       } else {
-        res.status(403).json(loginResponse.error)
+        console.log('403 loginResponse', loginResponse)
+        const errorResponse = loginResponse.error || 'Rol no autorizado';
+        res.status(403).json(errorResponse)
       }
       
     })
@@ -92,12 +94,23 @@ app.use(cors());
     })
 
     app.post('/api/products', async (req, res) => {
-      const { body } = req;
-      const createdProduct = 
-        await productsControllerInstance.createProduct({ ...body });
+      const { body, headers } = req;
+      const loginResponse = await authenticationControllerInstance.verifyLogin(headers.authorization);
 
-      res.status(201).json(createdProduct.dataValues);
-    })
+      if (!loginResponse.error && loginResponse.role === 'admin') {
+        try {
+          const createdProduct = await productsControllerInstance.createProduct({ ...body });
+          res.status(201).json(createdProduct.dataValues);
+        } catch (error) {
+          console.error('***** errooooorrrr DB******', error.name);
+          res.status(422).send(error.name)
+        }
+      } else {
+        console.log('403 loginResponse', loginResponse)
+        const errorResponse = loginResponse.error || 'Rol no autorizado';
+        res.status(403).json(errorResponse)
+      }
+    });
 
     app.patch('/api/product/:id', async (req, res) => {
       const { body, params } = req;
@@ -111,9 +124,7 @@ app.use(cors());
           await productsControllerInstance.updateProduct(params.id, { ...body });
 
         res.status(200).json(updatedproduct.dataValues);
-
       }
-      
     })
 
     app.delete('/api/product/:id', async (req, res) => {
