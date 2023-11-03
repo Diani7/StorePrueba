@@ -76,11 +76,19 @@ app.use(cors());
     // Definición de rutas de la API y sus controladores.
     // Aquí se establecen las rutas para la gestión de usuarios, productos y autenticación.
     // Se utilizan los métodos de los controladores para responder a las solicitudes HTTP.
-    
+    /**
+     * @route GET /api/users
+     * @desc Obtiene todos los usuarios registrados.
+     * @access Admin
+   */  
     app.get('/api/users', async (req, res) => {
       res.json(users);
     })
-
+    /**
+     * @route POST /api/users
+     * @desc Registra un nuevo usuario en el sistema.
+     * @access Admin
+   */
     app.post('/api/users', async (req, res) => {
       const { body, headers } = req;
       const loginResponse = await authenticationControllerInstance.verifyLogin(headers.authorization);
@@ -100,11 +108,19 @@ app.use(cors());
       }
       
     })
-
+    /**
+     * @route GET /api/products
+     * @desc Obtiene todos los productos disponibles en el inventario.
+     * @access Public
+   */
     app.get('/api/products', async (req, res) => {
       res.json(products);
     })
-
+    /**
+     * @route POST /api/products
+     * @desc Crea un nuevo producto en el inventario.
+     * @access Admin
+     */
     app.post('/api/products', async (req, res) => {
       const { body, headers } = req;
       const loginResponse = await authenticationControllerInstance.verifyLogin(headers.authorization);
@@ -123,7 +139,12 @@ app.use(cors());
         res.status(403).json(errorResponse)
       }
     });
-
+    /**
+     * @route PATCH /api/product/:id
+     * @desc Actualiza la información de un producto existente.
+     * @param id - El ID del producto a actualizar.
+     * @access Admin
+    */
     app.patch('/api/product/:id', async (req, res) => {
       const { body, params } = req;
 
@@ -138,14 +159,23 @@ app.use(cors());
         res.status(200).json(updatedproduct.dataValues);
       }
     })
-
+    /**
+   * @route DELETE /api/product/:id
+   * @desc Elimina un producto del inventario.
+   * @param id - El ID del producto a eliminar.
+   * @access Admin
+   */
     app.delete('/api/product/:id', async (req, res) => {
       const { params } = req;
       const deletedProduct = await productsControllerInstance.deleteProduct(params.id);
 
       res.status(200).json(deletedProduct.dataValues);
     })
-
+    /**
+   * @route POST /api/login
+   * @desc Autentica a un usuario y devuelve un token JWT.
+   * @access Public
+   */
     app.post('/api/login', async (req, res) => {
       
       const { body } = req;

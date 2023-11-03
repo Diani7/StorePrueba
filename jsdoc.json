@@ -1,0 +1,13 @@
+{
+  "source": {
+    "include": ["src"], // Directorio de los archivos fuente
+    "exclude": ["node_modules"], // Directorio excluido
+    "includePattern": ".+\\.js(doc|x)?$", // Patrón de archivos a incluir
+    "excludePattern": "(^|\\/|\\\\)_"
+  },
+  "opts": {
+    "destination": "./docs", // Directorio de salida para la documentación generada
+    "recurse": true, // Incluir subdirectorios
+    "readme": "./README.md" // Archivo README a incluir en la documentación
+  }
+}
